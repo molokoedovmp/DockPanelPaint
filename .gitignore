@@ -1,0 +1,9 @@
+bin
+obj
+*.suo
+*.user
+
+.vs
+
+#NuGetÉú³ÉµÄ
+packages
