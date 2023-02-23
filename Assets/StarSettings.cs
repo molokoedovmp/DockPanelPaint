@@ -19,6 +19,9 @@ namespace WindowsFormsApplication1
             InitializeComponent();
             this.m = m;
             textBox1.Text = $"{DocumentForm.starEnd}";
+            textBox2.Text = $"{DocumentForm.outerRadius}";
+            textBox3.Text = $"{DocumentForm.innerRadius}";
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -28,13 +31,25 @@ namespace WindowsFormsApplication1
             {
                 DocumentForm.starEnd = a;
             }
+            if (int.TryParse(textBox2.Text, out int b))
+            {
+                DocumentForm.outerRadius = b;
+            }
+            if (int.TryParse(textBox3.Text, out int c))
+            {
+                DocumentForm.innerRadius = c;
+            }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            Checker();
+        }
+        private void Checker()
+        {
             if (int.TryParse(textBox1.Text, out int w) || textBox1.Text == "")
             {
-                if (w <= 0 && textBox1.Text != ""&&w<=60)
+                if (w <= 0 && textBox1.Text != "" && w <= 60)
                 {
                     MessageBox.Show("Число должно быть положительным, меньше 60");
                     textBox1.Clear();

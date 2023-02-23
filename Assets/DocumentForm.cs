@@ -15,7 +15,9 @@ namespace WindowsFormsApplication1
         public bool localChanged;
         public Bitmap Image { get; set; }
         private Bitmap tmp { get; set; }
-        public static int starEnd { get; set; }
+        public static int starEnd { get; set; } 
+        public static int outerRadius { get; set; }
+        public static int innerRadius { get; set; }
 
         #region Конструктор
         public DocumentForm(MainForm parentForm)
@@ -99,7 +101,7 @@ namespace WindowsFormsApplication1
                             break;
                         case Tools.Star:
                             tmp = new Bitmap(Image.Width, Image.Height);
-                            PointF[] pts = StarPoints(starEnd, new Rectangle(new Point(X, Y), new Size(e.X - X, e.Y - Y)));
+                            PointF[] pts = StarPoints(starEnd, outerRadius, innerRadius, new Rectangle(new Point(X, Y), new Size(e.X - X, e.Y - Y)));
                             using (var g = Graphics.FromImage(tmp))
                             {
                                 g.DrawPolygon(new Pen(MainForm.penColor, MainForm.penSize), pts);
@@ -140,7 +142,7 @@ namespace WindowsFormsApplication1
                 if (parentForm.tools == Tools.Star)
                 {
                     img = Graphics.FromImage(Image);
-                    PointF[] pts = StarPoints(starEnd, new Rectangle(new Point(X, Y), new Size(e.X - X, e.Y - Y)));
+                    PointF[] pts = StarPoints(starEnd, outerRadius,innerRadius,new Rectangle(new Point(X, Y), new Size(e.X - X, e.Y - Y)));
                     img.DrawPolygon(new Pen(MainForm.penColor, MainForm.penSize), pts);
                     tmp = new Bitmap(1,1);
                     Invalidate();
@@ -213,75 +215,34 @@ namespace WindowsFormsApplication1
         {
             draw(sender,e);
         }
-        private PointF[] StarPoints(int num_points, Rectangle bounds)
+        private PointF[] StarPoints(int num_points, int outer, int inner ,Rectangle bounds)
         {
-            //try
-            //{
-            //    PointF[] pts = new PointF[num_points];
-
-            //    double rx = bounds.Width / 2;
-            //    double ry = bounds.Height / 2;
-            //    double cx = bounds.X + rx;
-            //    double cy = bounds.Y + ry;
-
-            //    double theta = -Math.PI / 2;
-            //    double dtheta = 4 * Math.PI / num_points;
-            //    for (int i = 0; i < num_points; i++)
-            //    {
-            //        pts[i] = new PointF(
-            //            (float)(cx + rx * Math.Cos(theta)),
-            //            (float)(cy + ry * Math.Sin(theta)));
-            //        theta += dtheta;
-            //    }
-
-            //    return pts;
-            //}
-            //catch
-            //{
-            //    return null;
-            //}
-            double R = 25, r = 50;   // радиусы
+            //int R = bounds.X, r = bounds.Y;   // радиусы
+            int R = outer, r = inner;
             double alpha = 0;        // поворот
-            double x0 = 60, y0 = 60; // центр
-
-            PointF[] pts = new PointF[2 * num_points + 1];
-            double a = alpha, da = Math.PI / num_points, l;
-
-            for (int k = 0; k < 2 * num_points + 1; k++)
+            double rx = bounds.Width;
+            double ry = bounds.Height;
+            try
             {
-                l = k % 2 == 0 ? r : R;
-                pts[k] = new PointF((float)(x0 + l * Math.Cos(a)), (float)(y0 + l * Math.Sin(a)));
-                a += da;
+                PointF[] pts = new PointF[2 * num_points + 1];
+                double a = alpha, da = Math.PI / num_points, l;
+
+                for (int k = 0; k < 2 * num_points + 1; k++)
+                {
+                    l = k % 2 == 0 ? r : R;
+                    pts[k] = new PointF((float)(rx + l * Math.Cos(a)), (float)(ry + l * Math.Sin(a)));
+                    a += da;
+                }
+
+
+                return pts;
             }
-
-
-            return pts;
-
-
+            catch
+            {
+                return null;
+            }
 
         }
 
     }
 }
-//double R = 25, r = 50;   // радиусы
-//double alpha = 0;        // поворот
-//double x0 = 60, y0 = 60; // центр
-//try
-//{
-//    PointF[] pts = new PointF[2 * num_points + 1];
-//    double a = alpha, da = Math.PI / num_points, l;
-
-//    for (int k = 0; k < 2 * num_points + 1; k++)
-//    {
-//        l = k % 2 == 0 ? r : R;
-//        pts[k] = new PointF((float)(x0 + l * Math.Cos(a)), (float)(y0 + l * Math.Sin(a)));
-//        a += da;
-//    }
-
-
-//    return pts;
-//}
-//catch
-//{
-//    return null;
-//}

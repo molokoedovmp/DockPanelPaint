@@ -22,7 +22,7 @@ namespace WindowsFormsApplication1
 		public MainForm()
 		{
 			InitializeComponent();
-			penColor = Color.White;
+			penColor = Color.Black;
 			penSize = 3;
 			WidthImage = 1920;
 			HeightImage = 1080;
@@ -351,6 +351,44 @@ namespace WindowsFormsApplication1
 			сохранитьКакToolStripMenuItem_Click(sender, e);
 
 		}
-        #endregion 
+        #endregion
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+			
+
+			try
+			{
+				
+				if (ActiveMdiChild != null)
+				{
+					((DocumentForm)ActiveMdiChild).Image = new Bitmap(((DocumentForm)ActiveMdiChild).Image, new Size(((DocumentForm)ActiveMdiChild).Image.Width + 300, ((DocumentForm)ActiveMdiChild).Image.Height + 300));
+					((DocumentForm)ActiveMdiChild).newUpdate();
+				}
+			}
+			catch
+			{
+
+			}
+		}
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+			
+
+			try
+			{
+				
+				if (ActiveMdiChild != null)
+				{
+					((DocumentForm)ActiveMdiChild).Image = new Bitmap(((DocumentForm)ActiveMdiChild).Image, new Size(((DocumentForm)ActiveMdiChild).Image.Width - 300, ((DocumentForm)ActiveMdiChild).Image.Height - 300));
+					((DocumentForm)ActiveMdiChild).newUpdate();
+				}
+			}
+			catch
+			{
+
+			}
+		}
     }
 }
