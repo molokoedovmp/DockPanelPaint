@@ -12,7 +12,8 @@ namespace WindowsFormsApplication1
         Line,
         Ellipse,
         Eraser,
-        Star
+        Star,
+        None
 
     }
 }

@@ -13,7 +13,10 @@ namespace WindowsFormsApplication1
     public partial class StarSettings : Form
     {
         MainForm m;
-
+        public StarSettings()
+        {
+            InitializeComponent();
+        }
         public StarSettings(MainForm m)
         {
             InitializeComponent();
@@ -26,7 +29,7 @@ namespace WindowsFormsApplication1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            m.tools = Tools.Star;
+            //m.tools = Tools.Star;
             if (int.TryParse(textBox1.Text, out int a))
             {
                 DocumentForm.starEnd = a;
@@ -43,10 +46,6 @@ namespace WindowsFormsApplication1
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            Checker();
-        }
-        private void Checker()
-        {
             if (int.TryParse(textBox1.Text, out int w) || textBox1.Text == "")
             {
                 if (w <= 0 && textBox1.Text != "" && w <= 60)
@@ -59,6 +58,40 @@ namespace WindowsFormsApplication1
             {
                 MessageBox.Show("Вы ввели символ, вводите цифры!");
                 textBox1.Clear();
+            }
+        }
+        
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(textBox2.Text, out int t) || textBox2.Text == "")
+            {
+                if (t <= 0 && textBox2.Text != "" && t <= 60)
+                {
+                    MessageBox.Show("Число должно быть положительным, меньше 60");
+                    textBox2.Clear();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Вы ввели символ, вводите цифры!");
+                textBox2.Clear();
+            }
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(textBox3.Text, out int r) || textBox3.Text == "")
+            {
+                if (r <= 0 && textBox3.Text != "" && r <= 60)
+                {
+                    MessageBox.Show("Число должно быть положительным, меньше 60");
+                    textBox1.Clear();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Вы ввели символ, вводите цифры!");
+                textBox3.Clear();
             }
         }
     }

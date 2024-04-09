@@ -7,6 +7,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace WindowsFormsApplication1
 {
+        
 	public partial class DocumentForm : DockContent
 	{
         private int X, Y;
@@ -19,7 +20,69 @@ namespace WindowsFormsApplication1
         public static int outerRadius { get; set; }
         public static int innerRadius { get; set; }
 
+        private double bitmapScale = 1;
+        private int _CanvasWidth;
+        //private Bitmap bitmap;
+        private int _CanvasHeight;
+        public double BitmapScale
+        {
+            get { return bitmapScale; }
+            set
+            {
+                if (value > 0)
+                    bitmapScale = value;
+                Invalidate();
+            }
+        }
+        public int CanvasWidth
+        {
+            get { return _CanvasWidth; }
+            set
+            {
+                _CanvasWidth = value;
+                UpdateBitmap();
+            }
+        }
+        public int CanvasHeight
+        {
+            get { return _CanvasHeight; }
+            set
+            {
+                _CanvasHeight = value;
+                UpdateBitmap();
+            }
+        }
+        public void UpdateBitmap()
+        {
+            Bitmap oldBitmap = (Bitmap)Image.Clone();
+            tmp = new Bitmap(CanvasWidth, CanvasHeight);
+            Graphics grph = Graphics.FromImage(tmp);
+            grph.DrawImage(oldBitmap, 0, 0);
+            Image = (Bitmap)tmp.Clone();
+            Invalidate();
+        }
+        //protected override void OnPaint(PaintEventArgs e)
+        //{
+        //    base.OnPaint(e);
+        //    if (bitmapScale != 1)
+        //        e.Graphics.DrawImage(new Bitmap(bitmap, new Size((int)(CanvasWidth * bitmapScale), (int)(CanvasHeight * bitmapScale))), 0, 0);
+        //    else
+        //        e.Graphics.DrawImage(bitmap, 0, 0);
+        //}
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            e.Graphics.DrawImage(Image, 0, 0); // 0 0 - место на форме с которого срисовывается
+            if (parentForm.tools == Tools.Line || parentForm.tools == Tools.Ellipse || parentForm.tools == Tools.Star)
+            {
+                if (bitmapScale != 1)
+                    e.Graphics.DrawImage(new Bitmap(tmp, new Size((int)(CanvasWidth * bitmapScale), (int)(CanvasHeight * bitmapScale))), 0, 0);
+                else
+                    e.Graphics.DrawImage(tmp, 0, 0);
+            }
+        }
         #region Конструктор
+
         public DocumentForm(MainForm parentForm)
         {
             InitializeComponent();
@@ -108,6 +171,8 @@ namespace WindowsFormsApplication1
                             }
                             Invalidate();
                             break;
+                        case Tools.None:
+                            break;
                     }
                 }
                 parentForm.changeXY(e.X, e.Y);
@@ -119,6 +184,7 @@ namespace WindowsFormsApplication1
         }
         private void DocumentForm_MouseUp(object sender, MouseEventArgs e)
         {
+            tmp = (Bitmap)Image.Clone();
             try
             {
                 if (parentForm.tools == Tools.Line)
@@ -156,13 +222,7 @@ namespace WindowsFormsApplication1
         {
             Invalidate();
         }
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-            e.Graphics.DrawImage(Image, 0, 0); // 0 0 - место на форме с которого срисовывается
-            if (parentForm.tools == Tools.Line || parentForm.tools == Tools.Ellipse || parentForm.tools == Tools.Star)
-                e.Graphics.DrawImage(tmp, 0, 0);
-        }
+       
         public void changeSize()
         {
             try
@@ -220,8 +280,8 @@ namespace WindowsFormsApplication1
             //int R = bounds.X, r = bounds.Y;   // радиусы
             int R = outer, r = inner;
             double alpha = 0;        // поворот
-            double rx = bounds.Width;
-            double ry = bounds.Height;
+            double rx = bounds.X;
+            double ry = bounds.Y;
             try
             {
                 PointF[] pts = new PointF[2 * num_points + 1];

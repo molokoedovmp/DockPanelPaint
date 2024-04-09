@@ -228,6 +228,8 @@ namespace WindowsFormsApplication1
         private void звёздочкаToolStripMenuItem_Click(object sender, EventArgs e)
         {
 			tools = Tools.Star;
+			StarSettings st = new StarSettings();
+			st.ShowDialog();
 			DeleteImage();
 		}
 
@@ -238,19 +240,15 @@ namespace WindowsFormsApplication1
 			if (s.ShowDialog() == DialogResult.OK)
 				звёздочкаToolStripMenuItem_Click(sender, e);
 		}
+        private void курсорToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			tools = Tools.None;
+			//DeleteImage();
+        }
         #endregion
 
-		#region доступность toolstrip 
-		private void окноToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
-        {
-			упорядочитьToolStripMenuItem.Enabled = ActiveMdiChild != null;
-		}
 
-        private void рисунокToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
-        {
-			размерХолстаToolStripMenuItem.Enabled = !(ActiveMdiChild == null);
-			звездаToolStripMenuItem.Enabled = !(ActiveMdiChild == null);
-		}
+		
         private void toolStripMenuItem1_DropDownOpening(object sender, EventArgs e)
         {
 			сохранитьКакToolStripMenuItem.Enabled = ActiveMdiChild != null;
@@ -259,7 +257,6 @@ namespace WindowsFormsApplication1
 
 
 
-		#endregion
 
 		#region расположение окон
 		private void каскадToolStripMenuItem_Click(object sender, EventArgs e)
@@ -301,12 +298,7 @@ namespace WindowsFormsApplication1
 			}
 		}
 
-        private void размерХолстаToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-			CanvasSizeForm size = new CanvasSizeForm(this);
-			if (size.ShowDialog() == DialogResult.OK)
-				((DocumentForm)ActiveMdiChild).changeSize();
-		}
+        
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -355,14 +347,12 @@ namespace WindowsFormsApplication1
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-			
-
 			try
 			{
-				
+
 				if (ActiveMdiChild != null)
 				{
-					((DocumentForm)ActiveMdiChild).Image = new Bitmap(((DocumentForm)ActiveMdiChild).Image, new Size(((DocumentForm)ActiveMdiChild).Image.Width + 300, ((DocumentForm)ActiveMdiChild).Image.Height + 300));
+					((DocumentForm)ActiveMdiChild).Image = new Bitmap(((DocumentForm)ActiveMdiChild).Image, new Size(((DocumentForm)ActiveMdiChild).Image.Width + 500, ((DocumentForm)ActiveMdiChild).Image.Height + 500));
 					((DocumentForm)ActiveMdiChild).newUpdate();
 				}
 			}
@@ -390,5 +380,14 @@ namespace WindowsFormsApplication1
 
 			}
 		}
+		
+
+		private void размерХолстаToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+			CanvasSizeForm size = new CanvasSizeForm(this);
+			if (size.ShowDialog() == DialogResult.OK)
+				((DocumentForm)ActiveMdiChild).changeSize();
+		}
+
     }
 }
